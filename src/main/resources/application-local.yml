@@ -1,0 +1,54 @@
+spring:
+  mail:
+    host: in-v3.mailjet.com
+    port: 25
+    username: 16772409ff502b641aa50b0056e911bb
+    password: b50781641b6654014f0da259e17f2702
+porAdmin:
+  username: por_exp
+  password: porexp
+  url: jdbc:oracle:thin:@10.110.1.128:1521:orawqa
+#  username: por_exp
+#  password: por_exp
+#  url: jdbc:oracle:thin:@10.110.2.127:1522:orawapd2
+#  username: por_admin
+#  password: por_admin
+#  url: jdbc:oracle:thin:@10.110.1.54:1522:orawpor
+#  username: POR_XP
+#  password: POR_XP
+#  url: jdbc:oracle:thin:@//localhost:1521/xe
+cif:
+ #  username: cif_admin
+ #   password: cif_admin
+#   url: jdbc:oracle:thin:@10.110.1.54:1523:oraldes1
+  username: cif_exp
+  password: cifexp
+  url: jdbc:oracle:thin:@10.110.3.50:1521/oraplaqa
+portalOraw:
+  username: por_exp
+  password: porexp
+  url: jdbc:oracle:thin:@10.110.1.128:1521:orawqa
+#  username: por_admin
+#  password: por_admin
+#  url: jdbc:oracle:thin:@10.110.1.54:1522:orawpor
+biceValidaPoder:
+  username: dbo_legal
+  password: dbo_legal
+  url: jdbc:jtds:sqlserver://10.110.1.131:1433;DatabaseName=db_legal
+dbMdp:
+  username: adm_mdp
+  password: adm_mdp
+  url: jdbc:jtds:sqlserver://10.110.8.12;DatabaseName=db_mdp
+biceComex:
+  username: portal
+  password: portal
+  url: jdbc:jtds:sqlserver://10.110.1.131;DatabaseName=BICE
+logging:
+  config: src/main/resources/logback-spring.xml
+propiedades:
+  archivoConfiguracion: src/main/resources/banca.empresas.properties
+server:
+  port: 8083
+cache:  
+  #se ejecuta 0 segundos 0 minutos 0 horas  * todos los dias y * todos los meses --> se ejecuta 1 ves por dia  a las 00:00
+  refresh: 0 0 0 * * ?

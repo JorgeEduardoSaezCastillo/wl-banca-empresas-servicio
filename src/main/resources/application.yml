@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: weblogic
+  jndi:
+    ignore: true
+server:
+  context-path: /banca-empresas-servicio/
+  port: 8083
+endpoints:
+  health:
+    enabled: true
+  actuator:
+    sensitive: false
+management:
+  security:
+    enabled: false
+

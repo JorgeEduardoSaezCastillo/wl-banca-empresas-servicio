@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.bice.banca.empresas.servicio.mapper.bicecomex.BiceComexMapper">
+	
+	<resultMap id="biceHashMap" type="java.util.HashMap" />
+	
+	<select id="consultarOperaciones" statementType="CALLABLE" parameterType="java.util.HashMap" resultMap="biceHashMap">
+	{#{RETURN_VALUE,	jdbcType=NUMERIC,	mode=OUT,	javaType=java.lang.Integer} =call dbo.Srv_firmas_consulta_general(#{rut_apoderado, mode=IN, jdbcType=VARCHAR,	javaType=java.lang.String},
+																													#{rut_empresa, 		mode=IN, 	jdbcType=VARCHAR, 	javaType=java.lang.String},
+																													#{producto, 		mode=IN, 	jdbcType=VARCHAR, 	javaType=java.lang.String},
+																													#{tipo_operacion, 	mode=IN, 	jdbcType=VARCHAR, 	javaType=java.lang.String},
+																													#{Estado, 			mode=IN, 	jdbcType=VARCHAR, 	javaType=java.lang.String},
+																													#{fecha_desde, 		mode=IN, 	jdbcType=DATE,		javaType=java.util.Date},
+																													#{fecha_hasta, 		mode=IN, 	jdbcType=DATE,		javaType=java.util.Date})
+	}
+	</select>
+	
+	<select id="contarOperaciones" resultType="hashmap" parameterType="java.util.HashMap" >
+		
+SELECT 
+			COD_SERVICIO,
+			 CANTIDADTOTAL, 
+			  CANTIDADAPROBAR, 
+			 CANTIDADEMPRESAS
+		FROM (
+			SELECT 
+				COD_SERVICIO,
+				COUNT(producto) AS CANTIDADTOTAL,
+				COUNT(producto) AS CANTIDADAPROBAR,
+				
+				COUNT(DISTINCT rut_empresa) AS CANTIDADEMPRESAS
+			FROM (
+				SELECT 
+					DISTINCT '1271' AS COD_SERVICIO,
+					A.rut_empresa,
+					A.producto,
+					A.tipo_operacion,
+					A.my_refno,
+					A.moneda,
+					A.monto_operacion,
+					A.beneficiario,
+					A.fecha,
+					A.Estado,
+					A.id,
+					A.fecha_modificacion,
+					A.firma_apoderado,
+					A.time_stamp_op,
+					A.correlativo
+				FROM (
+					SELECT 
+						d.account AS rut_empresa,
+						'Pagos' AS producto,
+						(CASE 
+							WHEN principalOtherCharge = 30 THEN 'Contado'
+							WHEN paymentOrderType = 1 AND simpleCodeID &lt;&gt; 61 THEN 'Simple'
+							WHEN paymentOrderType = 2 AND simpleCodeID &lt;&gt; 61 THEN 'Pago Imp. Simultaneo'
+							WHEN paymentOrderType = 3 AND simpleCodeID &lt;&gt; 61 THEN 'Pago Imp. Futuro'
+							WHEN paymentOrderType = 4 THEN 'Venta'
+							WHEN simpleCodeID = 61 THEN 'Pago Imp. Simultaneo'
+						END) AS tipo_operacion,
+						my_refno,
+						code AS moneda,
+						FT_AMNT AS monto_operacion,
+						ISNULL(e.name, D.NAME) AS beneficiario,
+						lcdate AS fecha,
+						(CASE Sts 
+							WHEN 0 THEN 'En Proceso'
+							WHEN 1 THEN 'Pendiente'
+							WHEN 3 THEN 'Enviada al Banco'
+							WHEN 4 THEN 'Liberada'        
+						END) AS estado,
+						b.id,
+						CONVERT(CHAR(30), b.lastchanged, 121) AS fecha_modificacion,
+						'NO' AS firma_apoderado,
+						' ' AS time_stamp_op,
+						0 AS correlativo
+					FROM ftseries a (nolock)
+					INNER JOIN ftinfo b (nolock) ON a.tid = b.tid
+					INNER JOIN currencies c ON DETL_CUR = c.id 
+					INNER JOIN parties d (nolock) ON APP_ADR1 = d.id 
+					LEFT JOIN parties e (nolock) ON e.id = BNF_ADR1
+					LEFT JOIN ftoperations j (nolock) ON b.tid = j.tid
+					WHERE sts NOT IN (5, 10)
+				   AND convert(char(10),lcdate ,111)= #{fecha}
+				 
+				UNION ALL
+					SELECT
+						rut,
+						'OP Recibidas',
+						'Liq. OP Recibidas',
+						bankrefno,
+						moneda,
+						monto_original,
+						ordenante,
+						fecha_recepcion,
+						(CASE estado
+							WHEN 1 THEN 'Liberada'
+							WHEN 2 THEN 'Vigente'
+							WHEN 3 THEN 'Pendiente'
+							WHEN 4 THEN 'En proceso'
+							WHEN 5 THEN 'Enviada al Banco'
+							WHEN 6 THEN 'Rechazada'
+							WHEN 7 THEN ''
+						END) AS estado,
+						id,
+						NULL AS firma_apoderado,
+						'NO' AS time_stamp_op,
+						'' AS lastchanged,
+						0 AS liquid
+					FROM opret (nolock)
+		            WHERE
+					convert(char(10),fecha_recepcion ,111)= #{fecha}
+				 
+				UNION ALL
+					SELECT
+						rut,
+						'OP Recibidas',
+						'Liq. OP Recibidas',
+						bankrefno,
+						moneda,
+						monto_original,
+						ordenante,
+						b.fecha_liquidacion,
+						(CASE b.estado
+							WHEN 1 THEN 'Liberada'
+							WHEN 2 THEN 'Vigente'
+							WHEN 3 THEN 'Pendiente'
+							WHEN 4 THEN 'En proceso'
+							WHEN 5 THEN 'Enviada al Banco'
+							WHEN 6 THEN 'Rechazada'
+							WHEN 7 THEN ''
+						END) AS estado,
+						a.id,
+						NULL AS firma_apoderado,
+						'NO' AS time_stamp_op,
+						CONVERT(CHAR(20), master.dbo.fn_varbintohexstr(CONVERT(binary(8), time_stamp))),  
+						liquid
+					FROM opret a (nolock), liquidacion b (nolock)
+					WHERE liquid &lt;&gt; 0 AND a.id = b.id 
+		        AND convert(char(10),b.fecha_liquidacion ,111)= #{fecha}
+				 
+				UNION ALL
+					SELECT
+						d.account,
+						'Cartas de Credito',
+						(CASE log
+							WHEN 0 THEN 'Apertura'
+							WHEN 1 THEN 'Enmienda'
+							WHEN 2 THEN 'XXXX'
+						END),
+						my_refno,
+						ISNULL((SELECT code FROM currencies c WHERE DETL_CUR = c.id), ''),
+						LC_AMNT,
+						e.name,
+						lcdate,
+						(CASE Sts 
+							WHEN 0 THEN 'En Proceso'
+							WHEN 1 THEN 'Pendiente'
+							WHEN 3 THEN 'Enviada al Banco'
+							WHEN 4 THEN 'Liberada'        
+						END),
+						b.tid,
+						CONVERT(CHAR(30), b.lastchanged, 121), 
+						'NO',
+						'',
+						seqNo
+					FROM lcseries a (nolock), lcinfo b (nolock), parties d (nolock), parties e (nolock)
+					WHERE a.tid = b.tid AND APP_ADR1 = d.id AND e.id = BNF_ADR1 AND log IN (0, 1) AND sts NOT IN (5)
+		            AND convert(char(10),lcdate ,111)= #{fecha}
+				 
+				UNION ALL
+					SELECT
+						isnull(d.account,isnull(d1.account,isnull(d2.account,d3.account))), 
+						'Mensajes',
+						(CASE product
+							WHEN 2 THEN 'LC Export'
+							WHEN 1 THEN 'Cartas de Credito'
+							WHEN 3 THEN 'Pagos'
+							WHEN 4 THEN 'Cobranzas'
+						END), 
+						a1.bankrefno,
+						c.code,
+						b1.LC_AMNT,
+						SUBSTRING(subject, 1, 35),
+						f.date,
+						(CASE f.Sts 
+							WHEN 0 THEN 'En Proceso'
+							WHEN 3 THEN ' '
+							WHEN 2 THEN 'Enviada al Banco'
+							WHEN 4 THEN 'Pendiente Firma o Envio'
+						END),
+						f.id,
+						CONVERT(CHAR(30), f.lastchanged, 121),  
+						'NO',
+						'',
+						0
+					FROM mails f (nolock)
+					LEFT JOIN ftseries a (nolock) ON a.tid = f.trnID AND product = 3
+					LEFT JOIN ftinfo b (nolock) ON a.tid = b.tid
+					LEFT JOIN currencies c (nolock) ON b.DETL_CUR = c.id
+					LEFT JOIN parties d (nolock) ON a.APP_ADR1 = d.id 
+					LEFT JOIN explcseries a1 (nolock) ON a1.tid = f.trnID AND product = 2
+					LEFT JOIN explcinfo b1 (nolock) ON a1.tid = b1.tid
+					LEFT JOIN currencies c1 (nolock) ON b1.DETL_CUR = c1.id
+					LEFT JOIN parties d1 (nolock) ON a1.BNF_ADR1 = d1.id 
+					LEFT JOIN lcseries a2 (nolock) ON a2.tid = f.trnID AND product = 1
+					LEFT JOIN lcinfo b2 (nolock) ON a2.tid = b2.tid
+					LEFT JOIN currencies c2 (nolock) ON b2.DETL_CUR = c2.id
+					LEFT JOIN parties d2 (nolock) ON a2.APP_ADR1 = d2.id 
+					LEFT JOIN colseries a3 (nolock) ON a3.tid = f.trnID AND product = 4
+					LEFT JOIN colinfo b3 (nolock) ON a3.tid = b3.tid
+					LEFT JOIN currencies c3 (nolock) ON b3.DETL_CUR = c3.id
+					LEFT JOIN parties d3 (nolock) ON a3.PAY_ADR1 = d3.id 
+					WHERE product IN (1, 2, 3, 4) AND (b.log = 0 OR b1.log = 0 OR b2.log = 0 OR b3.log = 0)
+		            AND convert(char(10),f.date ,111)= #{fecha}
+				) a 
+			WHERE rut_empresa IN 
+			<foreach item="empresa" collection="empresas" separator="," open="(" close=")">
+            	#{empresa}
+        	</foreach>
+				AND SUBSTRING(estado, 1, 10) IN ('En Proceso', 'Pendiente ', 'Pendiente Firma o Envio')
+		    ) A22
+		    GROUP BY COD_SERVICIO
+		)A23
+		
+	</select>    
+  
+</mapper>

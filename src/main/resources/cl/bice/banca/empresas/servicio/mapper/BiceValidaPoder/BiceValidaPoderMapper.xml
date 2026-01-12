@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.bice.banca.empresas.servicio.mapper.validapoder.BiceValidaPoderMapper">
+	
+	<resultMap id="biceHashMap" type="java.util.HashMap" />
+	
+	
+	<select id="validaPoder" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call PR_VALIDACION_PODERES(
+		#{RUTCLIENTE, mode=IN, jdbcType=CHAR,javaType=java.lang.String},
+		#{MANDATARIOS, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+		#{FACULTADES, mode=IN, jdbcType=CHAR,javaType=java.lang.String},
+		#{MONEDA, mode=IN, jdbcType=CHAR,javaType=java.lang.String},
+		#{MONTO, mode=IN, jdbcType=FLOAT,javaType=java.lang.String},
+		#{FLAG, mode=IN, jdbcType=CHAR,javaType=java.lang.String},
+		#{RESPUESTA, mode=OUT,jdbcType=CHAR,javaType=java.lang.String},
+		#{CODIGORECHAZO, mode=OUT,jdbcType=CHAR, javaType=java.lang.String},
+		#{DESCRIPCIONRECHAZO, mode=OUT,jdbcType=CHAR, javaType=java.lang.String}
+		)}
+	</select>	
+	
+    
+	
+</mapper>

@@ -1,0 +1,37 @@
+spring:
+  mail:
+    host: correo2010.bice.local
+    port: 25
+porAdmin:
+  jndi: jdbc/divisasPorAdminDS
+cif:
+  jndi: jdbc/cifBancaDigitalDS
+portalOraw:
+  jndi: jdbc/portalOraw
+biceValidaPoder: 
+  jndi: jdbc/biceValidarPoderMx
+dbMdp: 
+  jndi: jdbc/mdpDS
+biceComex:
+  jndi: jdbc/divisasBiceComexDS
+propiedades:
+  #QA
+  #archivoConfiguracion: /u01/wls1213/Oracle/Middleware/Oracle_Home/user_projects/domains/mobile02_domain/servers/AdminServer/properties/banca-empresas-servicio/banca.empresas.properties
+  #Prod nodo 2
+  #archivoConfiguracion: /u01/wls1213/Oracle/Middleware/Oracle_Home/user_projects/domains/mobile02_domain/servers/AdminServer/properties/banca-empresas-servicio/banca.empresas.properties
+  #Prod nodo 1
+  #archivoConfiguracion: /u01/wls1213/Oracle/Middleware/Oracle_Home/user_projects/domains/mobile01_domain/servers/AdminServer/properties/banca-empresas-servicio/banca.empresas.properties
+  #Desarrollo
+  archivoConfiguracion: servers/AdminServer/properties/banca-empresas-servicio/banca.empresas.properties
+logging:
+  #QA
+  #config: /u01/wls1213/Oracle/Middleware/Oracle_Home/user_projects/domains/mobile02_domain/servers/AdminServer/properties/banca-empresas-servicio/logback-spring.xml
+  #Prod nodo 2
+  #config: /u01/wls1213/Oracle/Middleware/Oracle_Home/user_projects/domains/mobile02_domain/servers/AdminServer/properties/banca-empresas-servicio/logback-spring.xml
+  #Prod nodo 1
+  #config: /u01/wls1213/Oracle/Middleware/Oracle_Home/user_projects/domains/mobile01_domain/servers/AdminServer/properties/banca-empresas-servicio/logback-spring.xml
+  #Desarrollo
+  config: servers/AdminServer/properties/banca-empresas-servicio/logback-spring.xml 
+cache:  
+  #se ejecuta 0 segundos 0 minutos 0 horas  * todos los dias y * todos los meses --> se ejecuta 1 ves por dia  a las 00:00
+  refresh: 0 0 0 * * ?

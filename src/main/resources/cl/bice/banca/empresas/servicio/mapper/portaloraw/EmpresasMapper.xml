@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="cl.bice.banca.empresas.servicio.mapper.portaloraw.EmpresasMapper">
+	<resultMap id="hashEmpresas" type="java.util.HashMap" />
+	<resultMap id="hashEmpresas2" type="java.util.HashMap" />
+	<select id="obtenerOperacionesPendientesDeFirma" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call PPR_SP_LIS_TEF_REPORTE_DET(
+		#{rut_cliente_i, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{fec_reg_d, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{fec_reg_h, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{estado_i, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cta_cargo_i, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{referencia_i, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{rut_benfi_i, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{srv_message, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{srv_status, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},
+		#{CURSOR, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=cursor}
+		)}
+	</select>
+	
+	<select id="obtenerListaEmpresas" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_USUARIO_EMPRESAS(
+		#{rut_usu, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{rut_cli, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{SALIDA, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+	
+	<select id="obtenerResumenOperaciones" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_OPER_USER_EMPRESAS(
+		#{v_rut_usu, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_rut_cli, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{v_salida, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>   
+	
+	<select id="obtenerCuentasPorPerfil" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_PERFIL_USUARIO(
+		#{v_rut_usu, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_rut_cli, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{v_salida, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+	
+	<select id="obtenerOperacionesAprobarLiberar" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_GEN_APROB_LIB(
+		#{v_rut_usu, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_rut_cli, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_estado, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_cod_servicio, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_fec_desde, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_fec_hasta, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{v_salida, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 
+	
+	<select id="obtieneListaOperacionesDia" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_OPER_APROB_DIA(#{V_RUT_USU, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+																		#{V_RUT_CLI, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+																		#{V_COD_SERVICO, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+																		#{V_OUT_COD_RESULT, mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.Integer},	
+																		#{V_OUT_MSG_RESULT, mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+																		#{V_SALIDA, 		mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+		
+	</select>
+	
+	<select id="existeFacultad" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PAC_FACULTADES.POR_SP_EXISTE_FACULTAD(
+		#{p_COD_SERVICIO, mode=IN, jdbcType=NUMERIC,javaType=java.lang.Integer},
+		#{p_RUT_CLIENTE, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+		#{p_RUT_APODERADO, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+		#{p_NUM_CTA, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+		#{p_COD_STATUS,mode=OUT,jdbcType=NUMERIC,javaType=java.lang.String},
+		#{p_EXISTE, mode=OUT,jdbcType=VARCHAR, javaType=java.lang.String},
+		#{p_MSG_STATUS, mode=OUT,jdbcType=VARCHAR, javaType=java.lang.String}
+		)}
+	</select>
+		
+	<select id="validarPertenenciaNumOperacionRutEmpresa" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_PERT_OPER_RUT(
+		#{v_RUT_CLI, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_COD_SERVICO, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{v_NUM_OPER_PROG,	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},															
+		#{v_OUT_COD_RESULT, mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 		mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+
+	<select id="consultarDetalleOperacion" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_DETALLE_OPER(
+		#{V_NUM_OPER_PROG, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},													
+		#{v_OUT_COD_RESULT, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	<select id="enviarMailCodGlsError" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=VARCHAR} = call POR_PKG_BANCADIGITAL_EMPRESAS.POR_FUN_LIS_TEF_MX_MAIL_REMESA(	
+																		#{V_NUM_OPER_PROG, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+																		#{V_COD_ERROR, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+																		#{V_GLS_ERROR,			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+																		#{V_TIPO,				mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}
+		
+	</select>								
+	
+	<select id="registraLogFacultad" statementType="CALLABLE" parameterType="java.util.HashMap">
+        {call POR_PAC_FACULTADES.POR_SP_REG_LOG_FACULTADES(
+        #{p_COD_SERVICIO, mode=IN, jdbcType=NUMERIC,javaType=java.lang.String},
+        #{p_NOM_APP, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_IP_USUARIO, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_NOM_SRV, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_NUM_OPER_PROG, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_RUT_CLIENTE, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_RUT_FIRMANTES, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_MONTO, mode=IN, jdbcType=NUMERIC,javaType=java.lang.String},
+        #{p_CTA_CARGO, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_MONEDA, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_COD_FACULTAD, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_GLS_OUT, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_FIR_COMPLETA, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_FIR_PARCIAL, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_COD_ESTADO, mode=IN, jdbcType=VARCHAR,javaType=java.lang.String},
+        #{p_COD_STATUS,mode=OUT,jdbcType=NUMERIC,javaType=java.lang.String},
+        #{p_MSG_STATUS, mode=OUT,jdbcType=VARCHAR, javaType=java.lang.String}
+        )}
+    </select>
+	
+	
+	<select id="obtenerNombreDelegado" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_NOM_DELEGADO(
+		#{v_RUT_DELEGADO, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},													
+		#{v_OUT_COD_RESULT, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	<select id="obtenerNombreCliente" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_NOM_CLIENTE(
+		#{v_RUT_CLI, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},													
+		#{v_OUT_COD_RESULT, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	
+	<select id="registraContratoFDA" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_ADM_CONT_FDA.POR_SP_REG_CONT_FDA(
+		#{P_RUT_CLIENTE, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_RUT_MODIFICA, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_COD_SERVICIOS, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_PROVEEDOR, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},												
+		#{P_STATUS, 			mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_MSG_STATUS, 		mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>	
+	
+	<select id="insertarFDASeguimiento" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PAC_FDA.POR_SP_INS_FDA_SEG_NEW(
+		#{PI_COD_OPER,	 		mode=INOUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_RUT_CLIENTE, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_RUT_APODERADO, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_RUT_FIRMA, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_FLG_PAG1, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_FLG_PAG2, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_ORIGEN, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},		
+		#{PI_NUM_OPER, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_EMPRESA, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_ID_TRX, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_TOKEN, 			mode=IN, 	jdbcType=CLOB,		javaType=java.lang.String},	
+		#{PI_CANAL, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PI_MONEDA, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{PI_MONTO, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{PI_CANT_OP, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},														
+		#{PO_STS, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{PO_MSG, 				mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>	
+	
+	<select id="empresaTieneCargoEnLineaLbtr" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=NUMERIC} = call POR_PKG_BANCADIGITAL_EMPRESAS.POR_FUN_CON_CARGOENLINEA_LBTR(		   	
+		#{V_RUT_CLI, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String})}
+	</select>	
+	
+	<select id="empresaTieneCuentaParaguaLbtr" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=NUMERIC} = call POR_PKG_BANCADIGITAL_EMPRESAS.POR_FUN_CON_CUENTAPARAGUA_LBTR(		   	
+		#{V_RUT_CLI, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String})}
+	</select>	
+	
+	<select id="obtenerCodigosErrorGfs" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_ERROR_REVERSA_GFS(
+		#{v_COD_ERROR, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	<select id="obtenerCuentasColaborativas" statementType="CALLABLE" parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_CTAS_COLABORATIVAS(
+		#{v_NUM_CUENTA,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_OUT_COD_RESULT,		mode=OUT,	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{v_OUT_MSG_RESULT, 	mode=OUT,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 
+	
+	<select id="obtenerDatosCclv" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_DAT_CCLV(
+		#{v_RUT_EMPRESA, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{v_SALIDA, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>   	
+
+	<select id="obtenerOperacionesAprobarLiberarPortal" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_LBTR_APROB_LIB_P(
+		#{v_rut_usu, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_rut_cli, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_estado, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_cod_servicio, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{v_salida, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 	
+	
+	<select id="obtenerFirmasNominaEnLinea" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_GET_FIRMAS_NOMINA(
+		#{P_COD_NOMINA, mode=IN, jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{P_FIRMAS, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+	
+	<select id="obtenerNominaEnLinea" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_GET_NOMINA(
+		#{P_COD_NOMINA, mode=IN, jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{P_NOMINA, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=hashEmpresas},
+		#{P_ESTADOS, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=hashEmpresas2}
+		)}
+	</select>
+	
+	<select id="obtenerNombreTipoNomina" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_GET_GLS_TIPO_NOMINA(
+		#{P_COD_TIPONOMINAPERFIL, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_NOM_SERVICIO, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}
+		)}
+	</select>
+	
+	<select id="obtenerFirmasNominaDiferida" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINAS.POR_SP_CONSULTA_APO_OP(
+		#{v_NUM_OPER_PROG, mode=IN, jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_COD_RESULT, mode=OUT, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{v_MSG_RESULT, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{v_CUR, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+	
+	<select id="obtenerDatosNominaDiferida" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_NOMINAS_DIFERIDAS(
+		#{v_NUM_NOMINA,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_OUT_COD_RESULT,		mode=OUT,	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{v_OUT_MSG_RESULT, 	mode=OUT,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 
+	
+	<select id="obtenerEmailEjecutivo" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=VARCHAR} = call POR_PKG_BANCADIGITAL_EMPRESAS.POR_FUN_GET_EMAIL_EJECUTIVO(		   	
+		#{V_RUT_CLI, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String})}
+	</select>
+	
+	<select id="obtenerEstadosNominasEnLinea" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_CONS_ESTADOS_NOMLIN(
+		#{P_COD_NOMINA, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_ESTADO, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{v_COD_RESULT, mode=OUT, jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_result, mode=OUT, jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 
+
+	<select id="validarMaxFechaLiberarNomLin" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_VALIDA_FEC_MAX(
+		#{I_NUM_NOMINA, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},	
+		#{O_COD_RESULT, mode=OUT, jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{O_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{O_MSG_VALIDA, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String}		
+		)}
+	</select>
+	
+	<select id="obtenerFechaContableNomLin" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_GET_FECHA_CONTABLE(
+		#{P_TRX, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{P_FECHA, mode=OUT, jdbcType=DATE,	javaType=java.sql.Date},
+		#{P_RESULT, mode=OUT, jdbcType=NUMERIC,	javaType=java.lang.String}
+		)}
+	</select>
+     
+    	<select id="registrarCargoNominasEnLinea" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_REG_TRX_NOMINA(
+		#{P_COD_NOMINA, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_COD_REGISTRO, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_TITULAR, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{RUT_TITULAR, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{P_CUENTA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{P_MONTO, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_TIPO_TRX, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_ESTADO_TRX, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_COD_BANCO, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},		
+		#{P_RESULTADO, mode=OUT, jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_GLS, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}
+	</select> 	
+	
+	<select id="obtenerParametrosNomLin" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_GET_PARAMETROS_NOMINA(
+		#{P_PARAMETROS, mode=OUT, jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>	
+	
+	<select id="obtenerCorrelativoNomLin"  statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_GET_CORRELATIVO(
+		#{P_RESULT, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}
+	</select>	
+	
+	<select id="insertarCorrelativoNomLin" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_INS_CORRELATIVO_NOMLIN(
+		#{P_COD_CONTROLTRANSF, 		mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_COD_SERVICIO, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},			
+		#{P_RUT_CLIENTE, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_RUT_USUARIO, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_GLS_TRANSFERENCIA, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},															
+		#{P_RESULTADO, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_MSG_RESULT, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	
+	<select id="consultarCorrelativoNomLin" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_CONS_CORRELATIVO_NOMLIN(
+		#{P_COD_CONTROLTRANSF, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{P_COD_SERVICIO, mode=IN, jdbcType=NUMERIC, javaType=java.lang.String},
+		#{v_COD_RESULT, mode=OUT, jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{v_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_result, mode=OUT, jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+	
+	
+	<select id="actualizarCorrelativoNomLin" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_NOMINA_EN_LINEA.POR_SP_ACT_CORRELATIVO_NOMLIN(
+		#{P_COD_CONTROLTRANSF, 		mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_COD_SERVICIO, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_NUM_OPER_PROG, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},													
+		#{P_RESULTADO, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_MSG_RESULT, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	<select id="getLisResumenCC" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_ADMIN.Ppr_Sp_Lis_ResumenCC(
+		#{Numero_Nomina_i, 		mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{Srv_Message, 			mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{Srv_Status, 			mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},													
+		#{N_CCA, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{N_NOCCA, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{N_VV, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{N_BICE, 				mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{N_SERVIPAG, 			mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{TIPONOMINA, 			mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{cur, mode=OUT, jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}		
+	</select>
+	
+	<select id="obtenerFechaIodata" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=VARCHAR} = call POR_PKG_BANCADIGITAL_EMPRESAS.POR_FUN_GET_FEC_IODATA(		   	
+		#{V_NUM_NOMINA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String})}
+	</select>
+	
+	<select id="validaDiaHabil" statementType="CALLABLE" parameterType="java.util.HashMap" >
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=NUMERIC} = call POR_ADMIN.POR_PAC_UTL_FECHA.ES_HABIL(
+		#{P_FECHA, javaType=java.util.Date, jdbcType=DATE})}
+	</select>
+
+	<select id="obtenerDetalleOperacion" statementType="CALLABLE" parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_OP_DETALLE(
+		#{V_NUM_OPER_PROG,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_COD_RESULT,				mode=OUT,	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{v_MSG_RESULT, 			mode=OUT,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_result, 				mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 
+	
+	<select id="registraSegBiceComex" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=NUMERIC} = call POR_ADMIN.POR_FUN_REGISTRA_OP_COMEX(	
+		#{I_IDENTIFICADOR,			mode=IN,	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{I_RUT_CLIENTE,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_RUT_APODERADO, 			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{I_PRODUCTO,				mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_TIPO_OPERACION,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_REF_ORDENANTE, 			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{I_MONEDA,					mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_MONTO,					mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_BENEFICIARIO,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_FECHA_INGRESO, 			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{I_ESTADO_FIRMA,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_INFO_OPERACION,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{I_ID_SESION, 				mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String})}
+	</select>
+	
+	<select id="validaBloqueoOperaciones" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_ADMIN.POR_SP_VAL_BLOQUEO_OPERPROG(
+		#{I_NUM_OPER_PROG, 		mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{I_COD_SERVICIO, 		mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{I_COD_CAMPO, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},													
+		#{I_RUT_EMPRESA, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{O_IS_BLOQUEADA, 		mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{O_SRV_MESSAGE, 		mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{O_SRV_STATUS, 		mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+	<select id="consultarTblUsuarioCliente" statementType="CALLABLE" parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.GET_USUARIO_CLIENTE(
+		#{P_RUT_USU,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{P_RUT_CLI,			mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{P_FLG_APODERADO,		mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{P_OUT_COD_RESULT,		mode=OUT,	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{P_OUT_MSG_RESULT, 	mode=OUT,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{P_SALIDA, 			mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+                                
+	<select id="consultarTblValidaPoderes" statementType="CALLABLE" parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_VALIDA_PODERES(
+		#{v_TIPO_PERSONA,		mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_TIPO_USUARIO,		mode=IN,	jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{v_OUT_COD_RESULT,		mode=OUT,	jdbcType=NUMERIC,	javaType=java.lang.String},
+		#{v_OUT_MSG_RESULT, 	mode=OUT,	jdbcType=VARCHAR,	javaType=java.lang.String},		
+		#{v_SALIDA, 			mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select>
+
+	<select id="obtenerOperacionesAprobarLiberarGenericoPortal" statementType="CALLABLE"
+		parameterType="java.util.HashMap">		
+		{call POR_PKG_BANCADIGITAL_EMPRESAS.POR_SP_CON_GEN_APROB_LIB_IE(
+		#{v_rut_usu, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_rut_cli, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_estado, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_cod_servicio, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{v_OUT_COD_RESULT, mode=OUT, jdbcType=NUMERIC,
+		javaType=java.lang.String},	
+		#{v_OUT_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},		
+		#{v_salida, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}
+	</select> 
+	
+	<select id="registraContratoFDADesactivado" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_ADM_CONT_FDA.POR_SP_REG_CONT_FDA_DESAC(
+		#{P_RUT_CLIENTE, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_RUT_MODIFICA, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_COD_SERVICIOS, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{P_PROVEEDOR, 			mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},												
+		#{P_STATUS, 			mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.String},	
+		#{P_MSG_STATUS, 		mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>	
+	
+	<select id="consultaContratosFDA" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_ADM_CONT_FDA.POR_SP_CONS_CONT_FDA(
+		#{RUT_CLIENTE, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{RUT_MODIFICA, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{COD_SERVICIO, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{ESTADO, 			mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},												
+		#{CUR, 				mode=OUT, 	jdbcType=CURSOR,	javaType=java.sql.ResultSet, resultMap=hashEmpresas}
+		)}		
+	</select>
+
+	<select id="lockTransaction" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_ADMIN.POR_SP_BLOQUEAR_TRX(
+				#{I_TRANSACCION, 	mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+				#{I_RUT_EMPRESA, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+				#{I_ACCION, 		mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+				#{O_COD_RESULT, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.math.BigDecimal, resultMap=hashEmpresas},
+				#{O_MSG_RESULT, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String, resultMap=hashEmpresas2}
+			)}
+	</select>
+
+	<select id="unLockTransaction" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_ADMIN.POR_SP_DESBLOQUEAR_TRX(
+				#{I_TRANSACCION, 	mode=IN, 	jdbcType=NUMERIC,	javaType=java.lang.String},
+				#{I_RUT_EMPRESA, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},
+				#{O_COD_RESULT, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.math.BigDecimal, resultMap=hashEmpresas},
+				#{O_MSG_RESULT, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String, resultMap=hashEmpresas2}
+			)}
+	</select>
+	
+	
+	
+	<select id="obtenerListaOperacionesAprobarLiberarPortal" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT * FROM (
+               select distinct j.num_oper_prog,
+               cod_servicio cod_servicio,
+               'SIS' tipo ,
+               'Monto' campo1, ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (7) AND num_oper_prog =  j.num_oper_prog) valor1,
+               'Referencia' campo2 , ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (637) AND num_oper_prog =  j.num_oper_prog) valor2,
+               'Fecha de Valuta' campo3 , ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (514) AND num_oper_prog =  j.num_oper_prog) valor3,
+               'Tipo de ingreso' campo4 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (638) AND num_oper_prog =  j.num_oper_prog),'M','Manual','Importada') valor4,
+               'Estado' campo5, j.NOM_ESTADO valor5,
+               'Cliente Ordenante' campo6 , ' ' valor6 ,
+               'Rut' campo7, j.rut_cliente valor7,
+               'Nombre' campo8, j.nom_cliente valor8,
+               'N Cuenta' campo9, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (4) AND num_oper_prog =  j.num_oper_prog) valor9,
+               'Ingresada por' campo10 , j.nombre_registra valor10,
+               'Aprobada por' campo11 ,  por_pkg_bancadigital_empresas.por_fun_get_apoderados(j.num_oper_prog) valor11,
+               'Cliente Beneficiario' campo12 , ' ' valor12,
+               'Rut' campo13, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (19) AND num_oper_prog =  j.num_oper_prog)  valor13,
+               'Nombre' campo14, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (527) AND num_oper_prog =  j.num_oper_prog)  valor14,
+               'Banco' campo15, (select nom_banco from tbl_banco where cod_banco=( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (529) AND num_oper_prog =  j.num_oper_prog)) AS valor15,
+               'Tipo Cuenta' campo16 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (21) AND num_oper_prog =  j.num_oper_prog),'000','Corriente','00100','Corriente','00120','Vista',' ')  valor16,
+               'N Cuenta' campo17, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (5) AND num_oper_prog =  j.num_oper_prog) valor17
+             FROM   view_lista_op j
+             WHERE  j.cod_servicio IN (935)
+                   AND j.rut_cliente = #{v_rut_cli}
+                   AND j.num_oper_prog IN ( ${v_lista_oper_prog} )
+                   AND j.rut_cliente in (SELECT val_parametro  FROM TBL_VALIDACION WHERE NOM_PARAMETRO= 'CONSULTASSIS' AND NOM_TIPO LIKE 'RUT%' )
+                   AND (select SUBSTR(val_campo,0,3)  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =637) in (SELECT val_parametro FROM TBL_VALIDACION WHERE NOM_PARAMETRO= 'CONSULTASSIS' AND NOM_TIPO LIKE 'TIPOPAGO%')
+                   AND TO_DATE(J.FECHA_CURSE,'DD-MM-YYYY') >= TRUNC(SYSDATE)
+            UNION ALL
+               select distinct j.num_oper_prog,
+               cod_servicio cod_servicio,
+               'DVP' tipo ,
+               'Monto' campo1, ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (7) AND num_oper_prog =  j.num_oper_prog) valor1,
+               'Referencia' campo2 , ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (637) AND num_oper_prog =  j.num_oper_prog) valor2,
+               'Fecha de Valuta' campo3 , ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (514) AND num_oper_prog =  j.num_oper_prog) valor3,
+               'Tipo de ingreso' campo4 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (638) AND num_oper_prog =  j.num_oper_prog),'M','Manual','Importada') valor4,
+               'Estado' campo5, j.NOM_ESTADO valor5,
+               'Cliente Ordenante' campo6 , ' ' valor6 ,
+               'Rut' campo7, j.rut_cliente valor7,
+               'Nombre' campo8, j.nom_cliente valor8,
+               'N Cuenta' campo9, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (4) AND num_oper_prog =  j.num_oper_prog) valor9,
+               'Ingresada por' campo10 , j.nombre_registra valor10,
+               'Aprobada por' campo11 ,  por_pkg_bancadigital_empresas.por_fun_get_apoderados(j.num_oper_prog) valor11,
+               'Cliente Beneficiario' campo12 , ' ' valor12,
+               'Rut' campo13, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (19) AND num_oper_prog =  j.num_oper_prog)  valor13,
+               'Nombre' campo14, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (527) AND num_oper_prog =  j.num_oper_prog)  valor14,
+               'Banco' campo15, (select nom_banco from tbl_banco where cod_banco=( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (529) AND num_oper_prog =  j.num_oper_prog)) AS valor15,
+               'Tipo Cuenta' campo16 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (21) AND num_oper_prog =  j.num_oper_prog),'000','Corriente','00100','Corriente','00120','Vista',' ')  valor16,
+               'N Cuenta' campo17, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (5) AND num_oper_prog =  j.num_oper_prog) valor17
+             FROM   view_lista_op j
+             WHERE  j.cod_servicio IN (935)
+                   AND j.rut_cliente = #{v_rut_cli}
+                   AND j.num_oper_prog IN ( ${v_lista_oper_prog} )
+                   AND (select val_campo from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =636) ='DVP'
+                   AND TO_DATE(J.FECHA_CURSE,'DD-MM-YYYY') >= TRUNC(SYSDATE)
+             UNION ALL
+               select distinct j.num_oper_prog,
+               cod_servicio cod_servicio,
+               'CCLV' tipo ,
+               'Monto' campo1, ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (7) AND num_oper_prog =  j.num_oper_prog) valor1,
+               'Referencia' campo2 , ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (637) AND num_oper_prog =  j.num_oper_prog) valor2,
+               'Fecha de Valuta' campo3 , ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (514) AND num_oper_prog =  j.num_oper_prog) valor3,
+               'Tipo de ingreso' campo4 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (638) AND num_oper_prog =  j.num_oper_prog),'M','Manual','Importada') valor4,
+               'Estado' campo5, j.NOM_ESTADO valor5,
+               'Cliente Ordenante' campo6 , ' ' valor6 ,
+               'Rut' campo7, j.rut_cliente valor7,
+               'Nombre' campo8, j.nom_cliente valor8,
+               'N Cuenta' campo9, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (4) AND num_oper_prog =  j.num_oper_prog) valor9,
+               'Ingresada por' campo10 , j.nombre_registra valor10,
+               'Aprobada por' campo11 ,  por_pkg_bancadigital_empresas.por_fun_get_apoderados(j.num_oper_prog) valor11,
+               'Cliente Beneficiario' campo12 , ' ' valor12,
+               'Rut' campo13, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (19) AND num_oper_prog =  j.num_oper_prog)  valor13,
+               'Nombre' campo14, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (527) AND num_oper_prog =  j.num_oper_prog)  valor14,
+               'Banco' campo15, (select nom_banco from tbl_banco where cod_banco=( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (529) AND num_oper_prog =  j.num_oper_prog)) AS valor15,
+               'Tipo Cuenta' campo16 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (21) AND num_oper_prog =  j.num_oper_prog),'000','Corriente','00100','Corriente','00120','Vista',' ')  valor16,
+               'N Cuenta' campo17, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (5) AND num_oper_prog =  j.num_oper_prog) valor17
+             FROM   view_lista_op j
+             WHERE  j.cod_servicio IN (935)
+                   AND j.rut_cliente = #{v_rut_cli}
+                   AND j.num_oper_prog IN ( ${v_lista_oper_prog} )
+                   AND TO_DATE(J.FECHA_CURSE,'DD-MM-YYYY') >= TRUNC(SYSDATE)
+                   and (select val_campo  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =19)=(select val_parametro from tbl_validacion where FLG_ACTIVO=1 AND nom_parametro = 'CCLV' and  nom_tipo = 'RUTCCLV')
+                   and (select val_campo  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =529)='18'
+                   and (select TO_NUMBER(val_campo)  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =5) =TO_NUMBER(0)
+                   
+			 UNION ALL
+              select distinct j.num_oper_prog,
+               cod_servicio cod_servicio,
+               'SOMA' tipo ,
+               'Monto' campo1, ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (7) AND num_oper_prog =  j.num_oper_prog) valor1,
+               'Referencia' campo2 , ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (637) AND num_oper_prog =  j.num_oper_prog) valor2,
+               'Fecha de Valuta' campo3 , ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (514) AND num_oper_prog =  j.num_oper_prog) valor3,
+               'Tipo de ingreso' campo4 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (638) AND num_oper_prog =  j.num_oper_prog),'M','Manual','Importada') valor4,
+               'Estado' campo5, j.NOM_ESTADO valor5,
+               'Cliente Ordenante' campo6 , ' ' valor6 ,
+               'Rut' campo7, j.rut_cliente valor7,
+               'Nombre' campo8, j.nom_cliente valor8,
+               'N Cuenta' campo9, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (4) AND num_oper_prog =  j.num_oper_prog) valor9,
+               'Ingresada por' campo10 , j.nombre_registra valor10,
+               'Aprobada por' campo11 ,  por_pkg_bancadigital_empresas.por_fun_get_apoderados(j.num_oper_prog) valor11,
+               'Cliente Beneficiario' campo12 , ' ' valor12,
+               'Rut' campo13, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (19) AND num_oper_prog =  j.num_oper_prog)  valor13,
+               'Nombre' campo14, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (527) AND num_oper_prog =  j.num_oper_prog)  valor14,
+               'Banco' campo15, (select nom_banco from tbl_banco where cod_banco=( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (529) AND num_oper_prog =  j.num_oper_prog)) AS valor15,
+               'Tipo Cuenta' campo16 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (21) AND num_oper_prog =  j.num_oper_prog),'000','Corriente','00100','Corriente','00120','Vista',' ')  valor16,
+               'N Cuenta' campo17, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (5) AND num_oper_prog =  j.num_oper_prog) valor17
+             FROM   view_lista_op j
+             WHERE  j.cod_servicio IN (835)
+                   AND j.rut_cliente = #{v_rut_cli}
+                   AND j.num_oper_prog IN ( ${v_lista_oper_prog} )
+                   AND TO_DATE(J.FECHA_CURSE,'DD-MM-YYYY') >= TRUNC(SYSDATE)
+                   AND (select val_campo  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =636)='SOMA'			                    
+                   
+             UNION ALL
+               select distinct j.num_oper_prog,
+               cod_servicio cod_servicio,
+               'Simple' tipo ,
+               'Monto' campo1, ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (7) AND num_oper_prog =  j.num_oper_prog) valor1,
+               'Referencia' campo2 , ( SELECT val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (637) AND num_oper_prog =  j.num_oper_prog) valor2,
+               'Fecha de Valuta' campo3 , ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE   cod_campo IN (514) AND num_oper_prog =  j.num_oper_prog) valor3,
+               'Tipo de ingreso' campo4 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (638) AND num_oper_prog =  j.num_oper_prog),'M','Manual','Importada') valor4,
+               'Estado' campo5, j.NOM_ESTADO valor5,
+               'Cliente Ordenante' campo6 , ' ' valor6 ,
+               'Rut' campo7, j.rut_cliente valor7,
+               'Nombre' campo8, j.nom_cliente valor8,
+               'N Cuenta' campo9, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (4) AND num_oper_prog =  j.num_oper_prog) valor9,
+               'Ingresada por' campo10 , j.nombre_registra valor10,
+               'Aprobada por' campo11 ,  por_pkg_bancadigital_empresas.por_fun_get_apoderados(j.num_oper_prog) valor11,
+               'Cliente Beneficiario' campo12 , ' ' valor12,
+               'Rut' campo13, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (19) AND num_oper_prog =  j.num_oper_prog)  valor13,
+               'Nombre' campo14, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE  cod_campo IN (527) AND num_oper_prog =  j.num_oper_prog)  valor14,
+               'Banco' campo15, (select nom_banco from tbl_banco where cod_banco=( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (529) AND num_oper_prog =  j.num_oper_prog)) AS valor15,
+               'Tipo Cuenta' campo16 , DECODE(( SELECT DISTINCT  val_campo FROM   TBL_DETALLE_CAMP WHERE cod_campo IN (21) AND num_oper_prog =  j.num_oper_prog),'000','Corriente','00100','Corriente','00120','Vista',' ')  valor16,
+               'N Cuenta' campo17, ( SELECT DISTINCT  val_campo FROM TBL_DETALLE_CAMP WHERE cod_campo IN (5) AND num_oper_prog =  j.num_oper_prog) valor17
+             FROM   view_lista_op j
+             WHERE  j.cod_servicio IN (935)
+                   AND j.rut_cliente = #{v_rut_cli}
+                   AND j.num_oper_prog IN ( ${v_lista_oper_prog} )
+                   AND TO_DATE(J.FECHA_CURSE,'DD-MM-YYYY') >= TRUNC(SYSDATE)
+                   AND (select val_campo  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =636)='Simple'
+                   AND ((select val_campo  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =19) != (select val_parametro from tbl_validacion where FLG_ACTIVO=1 AND nom_parametro = 'CCLV' and  nom_tipo = 'RUTCCLV')
+                   or (select val_campo  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =529) != '18'
+                   and (select TO_NUMBER(val_campo)  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =5) != TO_NUMBER(0))
+                   AND ( j.rut_cliente not in (SELECT val_parametro  FROM TBL_VALIDACION WHERE NOM_PARAMETRO= 'CONSULTASSIS' AND NOM_TIPO LIKE 'RUT%' )
+                                                   or (select SUBSTR(val_campo,0,3)  from por_admin.tbl_detalle_camp where num_oper_prog =j.num_oper_prog and cod_campo =637) not in (SELECT val_parametro FROM TBL_VALIDACION WHERE NOM_PARAMETRO= 'CONSULTASSIS' AND NOM_TIPO LIKE 'TIPOPAGO%'))
+			
+			
+		) 
+		WHERE to_number(valor9) IN (select to_number(PP.NUM_PRODUCTO) from tbl_perfilproducto PP 
+									where PP.rut_cliente = #{v_rut_cli} and PP.rut_usuario = #{v_rut_usu} and PP.cod_servicio = #{v_cod_servicio_perfil}
+                       				UNION ALL  
+                           			SELECT to_number(valor9) FROM tbl_usuariocliente uc 
+                           			WHERE uc.rut_cliente = #{v_rut_cli} 
+                           			AND uc.rut_usuario = #{v_rut_usu} AND uc.flg_adm_delegado = 1 AND uc.FLG_ACTIVO = 1)
+ 		ORDER BY valor2 
+	</select>
+	
+		
+	<update id="actualizaDetalleCampPortal" parameterType="java.util.HashMap" flushCache="true" statementType="PREPARED" timeout="30">
+		UPDATE TBL_DETALLE_CAMP SET VAL_CAMPO = #{v_val_campo}
+  		WHERE NUM_OPER_PROG = #{v_num_oper_prog}
+  		AND COD_CAMPO = #{v_cod_campo} 	
+	</update>
+
+
+	<update id="actualizaEstadoOperProg" parameterType="java.util.HashMap" flushCache="true" statementType="PREPARED" timeout="30">
+		UPDATE TBL_OPER_PROG SET COD_ESTADO = #{v_cod_estado}
+  		WHERE NUM_OPER_PROG = #{v_num_oper_prog}
+	</update>
+	
+
+    <select id="getNombreApoderadoClaveAcceso" resultType="string" parameterType="java.util.HashMap">
+		SELECT NOM_CLIENTE FROM TBL_CLAVEACCESO WHERE RUT_USUARIO = #{v_rut_usu}
+	</select>
+	
+    <select id="getNombreCliente" resultType="string" parameterType="java.util.HashMap">
+		SELECT NOMBRES || ' ' || PATERNO || ' ' MATERNO  FROM POR_VIEW_CIF_CLIENTES CC WHERE CC.NUM_IDEN  = #{v_rut_usu}
+	</select>
+	
+    <select id="getDatosOperProg" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT OP.COD_SERVICIO, OP.COD_ESTADO, OP.RUT_CLIENTE, OP.NOM_CLIENTE, OP.RUT_REGISTRO, OP.NOM_REGISTRO, TO_CHAR(OP.FEC_CURSE,'DD-MM-YYYY') FEC_CURSE 
+		FROM TBL_OPER_PROG OP WHERE OP.NUM_OPER_PROG = #{v_num_oper_prog} 
+	</select>
+
+	<select id="getParametrosValidacion" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT V.COD_PARAMETRO, V.NOM_PARAMETRO, V.NOM_TIPO, V.VAL_PARAMETRO, V.VAL_PARAMETRO_2, V.VAL_PARAMETRO_3, V.VAL_PARAMETRO_4
+		FROM TBL_VALIDACION V 
+		WHERE V.NOM_PARAMETRO = #{v_nom_parametro}
+		AND V.FLG_ACTIVO = 1
+		ORDER BY V.COD_PARAMETRO
+	</select>
+	
+
+    <select id="getFirmasOperProg" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT A.RUT_APODERADO, A.NUM_OPER_PROG, A.NOM_APODERADO, A.FEC_FIRMA 
+		FROM TBL_APO_OP A 
+		WHERE A.NUM_OPER_PROG = #{v_num_oper_prog}
+	</select>
+	
+    <select id="getDatosUsuarioCliente" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT U.FLG_APODERADO, U.FLG_ADM_DELEGADO 
+		FROM TBL_USUARIOCLIENTE U 
+		WHERE U.RUT_CLIENTE = #{v_rut_cli} 
+		AND U.RUT_USUARIO = #{v_rut_usu} 
+		AND U.FLG_ACTIVO = 1
+	</select>
+
+	<update id="actualizaNumOperacionTrfOperProg" parameterType="java.util.HashMap" flushCache="true" statementType="PREPARED" timeout="30">
+		UPDATE TBL_OPER_PROG SET NUM_OPERACION_TRF = #{v_num_operacion_trf}
+  		WHERE NUM_OPER_PROG = #{v_num_oper_prog}
+	</update>
+
+	<update id="eliminaFirmaApoderado" parameterType="java.util.HashMap" flushCache="true" statementType="PREPARED" timeout="30">
+		DELETE FROM TBL_APO_OP 
+  		WHERE NUM_OPER_PROG = #{v_num_oper_prog}
+  		AND RUT_APODERADO = #{v_rut_usu}
+	</update>
+
+	<update id="agregaCampoDetalleCampPortal" parameterType="java.util.HashMap" flushCache="true" statementType="PREPARED" timeout="30">
+		INSERT INTO TBL_DETALLE_CAMP (NUM_OPER_PROG, COD_CAMPO, VAL_CAMPO) 
+  		VALUES (#{v_num_oper_prog}, #{v_cod_campo}, #{v_val_campo} )  
+	</update>
+	
+	<update id="registraFirmaApoderado" parameterType="java.util.HashMap" flushCache="true" statementType="PREPARED" timeout="30">
+		INSERT INTO TBL_APO_OP (RUT_APODERADO, NUM_OPER_PROG, NOM_APODERADO, FEC_FIRMA, DATO_FIRMA) 
+  		VALUES (#{v_rut_apoderado}, #{v_num_oper_prog}, #{v_nom_apoderado}, SYSDATE, #{v_dato_firma} )  
+	</update>
+	
+	
+<select id="consultarUsuarioExcepcionado" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PAC_FDA.POR_SP_VAL_EXCEPCION_FDAAPP(
+		#{PI_RUT, 	mode=IN, 	jdbcType=VARCHAR,	javaType=java.lang.String},	
+		#{PO_STS, 	mode=OUT, 	jdbcType=NUMERIC,	javaType=java.lang.Integer},	
+		#{PO_MSG, 	mode=OUT, 	jdbcType=VARCHAR,	javaType=java.lang.String}
+		)}		
+	</select>
+	
+</mapper>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="cl.bice.banca.empresas.servicio.mapper.poradmin.BancaDigitalMapper">
+	<resultMap id="hashBancaDigital" type="java.util.HashMap" />
+	<select id="obtenerContexto" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_contexto(
+		#{codigo_servicio, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{contexto, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+	<select id="obtenerAlias" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_alias(
+		#{codigo_tarjeta, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{rut, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{alias_tarjeta, mode=OUT,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado, mode=OUT,
+		jdbcType=VARCHAR, javaType=java.lang.String},
+		#{gls_estado, mode=OUT,
+		jdbcType=VARCHAR, javaType=java.lang.String}
+		)}
+	</select>
+	<select id="obtenerValorUf" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_uf(
+		#{fecha,
+		mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{valor_uf,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado,
+		mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}
+		)}
+	</select>
+	<select id="obtenerCampana" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_campana(
+		#{rut,
+		mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{cod_estado,
+		mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{banner,
+		mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet,
+		resultMap=hashBancaDigital}
+		)}
+	</select>
+	<select id="obtenerTextoInformativo" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call POR_PKG_MOBILE.CONSULTA_TEXTOS_INFORMATIVOS(
+		#{P_ID_INFORMACION, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_TEXTO, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+
+	<select id="obtenerPac" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{call POR_PKG_MOBILE.CONSULTAR_PAC(
+		#{P_CUENTA, mode=IN,
+		jdbcType=VARCHAR, javaType=java.lang.String},
+		#{P_FORMA_PAGO, mode=OUT,
+		jdbcType=VARCHAR, javaType=java.lang.String},
+		#{P_NUM_CUENTA, mode=OUT,
+		jdbcType=VARCHAR, javaType=java.lang.String}
+		)}
+	</select>
+	<select id="obtenerFecha" resultType="hashmap" parameterType="java.util.HashMap">
+		select sysdate from dual
+	</select>
+	<select id="obtenerFechaPKG" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_fecha(
+		#{fecha,
+		mode=OUT, jdbcType=TIMESTAMP, javaType=java.util.Date}
+		)}
+	</select>
+
+
+	<select id="obtenerValidaciones" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_validaciones(
+		#{nom_parametro, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{nom_tipo, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{flg_activo, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{validacion, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet,
+		resultMap=hashBancaDigital}
+		)}
+	</select>
+
+	<select id="obtenerBancos" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_bancos(
+		#{pi_mdp,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{bancos,
+		mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet,
+		resultMap=hashBancaDigital}
+		)}
+	</select>
+
+
+	<select id="obtenerNombreCliente" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_nombre_cliente(
+		#{pi_rut, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{nombre, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+
+
+	<select id="obtenerCamposServicios" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_campos_servicios(
+		#{pi_codigo_servicio, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado, mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{campos, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet,
+		resultMap=hashBancaDigital}
+		)}
+	</select>
+	<select id="obtenerTipoTef" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_tipo_tef(
+		#{pi_cod_banco_cargo, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_cod_banco_abono, mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_rut_cta_cargo,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_rut_cta_abono, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_tipo_cta_cargo, mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_tipo_cta_abono,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_nom_canal,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{tip_trans,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+	<select id="actualizarAlias" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_act_alias(
+		#{pi_codigo_tarjeta, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_rut, mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_alias_tarjeta,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{pi_cod_producto,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+	<select id="registrarSolicitudSFA" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call POR_PKG_MOBILE.REGISTRAR_SOLICITUD_SFA(
+		#{P_SESION, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_RUT, mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_COD_SERVICIO,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_OUT_ID_CONTROL_TRX,
+		mode=OUT,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+	<select id="registrarSFA" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call POR_PKG_MOBILE.REGISTRAR_CTRL_TRX(
+		#{P_SESION,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_RUT, mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_COD_SERVICIO,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO1,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO2,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO3,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO4,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO5,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO6,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_CAMPO7,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_TIPO_FA,
+		mode=IN,
+		jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_OUT_ID_CONTROL_TRX,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_COD_ESTADO,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{P_DESCRIPCION,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+
+
+	<select id="obtenerContratos" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_contratos(
+		#{pi_rut, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{contratos, mode=OUT, jdbcType=CURSOR,
+		javaType=java.sql.ResultSet,
+		resultMap=hashBancaDigital}
+		)}
+	</select>
+	
+	
+	<select id="obtenerDAP" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call por_pkg_banca_digital.por_sp_obt_dap(
+		#{pi_rut, mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{cod_estado,
+		mode=IN, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{gls_estado,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{monto_pesos,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{monto_dolares,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{monto_euros,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String},
+		#{fecha,
+		mode=OUT, jdbcType=VARCHAR,
+		javaType=java.lang.String}
+		)}
+	</select>
+	
+	<select id="obtenerDAPUF" resultType="double"
+		parameterType="java.util.HashMap">
+		
+        SELECT
+            nvl(SUM(mto_producto),0) as monto_uf
+        FROM
+            por_view_cif_cruceproductos c
+        WHERE
+                c.num_iden = #{pi_rut}
+            AND
+                c.cod_producto = 310
+            AND
+                c.cod_moneda = 300
+	</select>
+	
+	<select id="obtenerFechaContable" statementType="CALLABLE" parameterType="java.util.HashMap">
+        { #{NUM_CONTABLE,javaType=java.sql.ResultSet,jdbcType=VARCHAR,mode=OUT,javaType=java.lang.String} = call POR_PAC_WS.POR_FUN_LIS_FECCONTABLE(
+        #{FECHA_INI, mode=IN, jdbcType=TIMESTAMP, javaType=java.lang.String},
+        #{V_TRX, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+        #{FCONTABLE, mode=OUT, jdbcType=TIMESTAMP, javaType=java.util.Date})}
+    </select>
+    <select id="obtenerCampanaConsumoDirecto" resultType="hashmap" parameterType="java.util.HashMap">
+		select c.cor_campana, c.rut_cliente, c.mto_preaprobado,i.fec_inicio, i.fec_termino from clicam c, tbl_pre_aprob_cred_cons p, idecam i
+where c.rut_cliente=#{RUT}
+and p.muestra_banner='S' and c.cod_reg_status=0 
+and ltrim(p.rut_cliente,'0')=c.rut_cliente
+and i.cod_reg_status=0 and c.cor_campana=i.cor_campana
+and i.flg_activa=1 and i.cod_tipcampana='CONS' 
+and sysdate between i.fec_inicio and i.fec_termino
+and c.rut_cliente not in (
+select t.rut_cliente from por_admin.tbl_cred_online_tmp t where t.rut_cliente=lpad(#{RUT},10,'0') and trunc(t.fec_oper)=trunc(sysdate)
+)
+	</select>
+	<select id="obtenerCampanaDirecto" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT  nro_prioridad,
+                        cod_tipcampana,
+                        otr.cor_campana,
+                        gls_campana,
+                        rut_cliente,
+                        nom_cliente,
+                        nom_apepaterno,
+                        nom_apematerno,
+                        otr.gls_oferta,
+                        flg_email,
+                        flg_aviso,
+                        cod_obs_pri,
+                        cod_obs_sec,
+                        fec_carga,
+                        num_ejecutivo,
+                        cod_segmento,
+                        flg_oferta,
+                        ide.flg_icono_res,
+                        ide.gls_popup,
+                        ide.flg_ver_todos,
+                        ide.gls_banner,
+                        ide.flg_banner_rotativo,
+                        ide.flg_reemplaza_resumen
+                    FROM
+                        sac_admin.cliotr otr,
+                        sac_admin.sac_view_campanas ide
+                    WHERE
+                            ide.cor_campana = otr.cor_campana
+                        AND
+                            otr.cor_campana IN (
+                                (
+                                    SELECT
+                                        cor_campana
+                                    FROM
+                                        sac_admin.sac_view_campanas
+                                    WHERE fec_inicio BETWEEN fec_inicio and fec_termino
+                                        AND
+                                            flg_activa = 1
+                                        AND
+                                            cod_tipcampana = 'INFO'
+                                        AND
+                                            num_tipo_persona = 1
+                                )
+                            )
+                        AND
+                            cod_tipcampana = 'INFO'
+                        AND
+                            rut_cliente = #{RUT}
+                        AND
+                            flg_oferta > 0
+
+					union all
+
+					SELECT Distinct
+								nro_prioridad,
+								cod_tipcampana,
+								COR_CAMPANA ,
+								gls_campana,
+								CV.NUM_IDEN,
+								CV.NOM_NOMBRES,
+								CV.NOM_PATERNO,
+								CV.NOM_MATERNO,
+								'otr.gls_oferta',
+								-1,
+								-1 ,
+								-1 ,
+								-1 ,
+								sysdate,
+								null,
+								'-1',
+								-1,
+								ide.flg_icono_res,
+								ide.gls_popup,
+								ide.flg_ver_todos,
+								ide.gls_banner,
+								ide.flg_banner_rotativo,
+								ide.flg_reemplaza_resumen
+							FROM
+								sac_admin.sac_view_campanas ide,POR_VIEW_CIF_CLIENTENATURAL CV
+								where ide.flg_activa=1 and sysdate between ide.fec_inicio and ide.fec_termino and ide.cod_reg_status=0
+								and ide.flg_ver_todos=1 and ide.COR_CAMPANA||#{RUT} not in
+								(Select p.cor_campana||p.rut_cliente from CLICAM_PUB p
+														 where p.rut_cliente= #{RUT} and p.cor_campana=ide.COR_CAMPANA)
+					AND CV.NUM_IDEN= #{RUT}
+
+                    ORDER BY nro_prioridad ASC
+	</select>
+	<select id="obtenerRutUsuario" resultType="hashmap" parameterType="java.util.HashMap">
+		SELECT RUT_USUARIO FROM tbl_sesion_portalapp
+		WHERE COD_TOKEN=#{COD_TOKEN} AND RUT_CLIENTE=#{RUT_CLIENTE}
+	</select>
+	
+	<select id="validaDiaHabil" statementType="CALLABLE" parameterType="java.util.HashMap" >
+	 {
+	   #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=NUMERIC} = call POR_ADMIN.POR_PAC_UTL_FECHA.ES_HABIL(#{P_FECHA, javaType=java.util.Date, jdbcType=DATE})    
+	 }
+	</select>
+
+	<!-- DRA 2018-09-11 control ctas nuevas en agendamiento -->	
+	<select id="validaMontoTefFull" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ #{RESULT, javaType=java.lang.String, mode=OUT, jdbcType=NUMERIC} = call POR_ADMIN.POR_PKG_CONTROL_MTODIARIO.POR_FUN_VALIDAMONTOTEFFULL_2(		   	
+		#{V_CTA_INSCRITA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_COD_PRODUCTO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_NUM_CONTRATO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_RUTCLIENTEORIGEN, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_RUTCLIENTEDESTINO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_MONTO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_MONEDA, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_FECCURSE, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_CUENTA_DESTINO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_COD_BANCO_DESTINO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_TIPO_CUENTA_DESTINO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_COD_SERVICIO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_BICEPASS_20, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_AGREGA_CTA_ABONO, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String},				
+		#{V_MESSAGEERROR, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_MESSAGEERRORCLIENTE, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
+		#{V_COD_RESULT, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String})}
+	</select>
+	
+	
+	
+	<!-- DRA 2018-09-11 control ctas nuevas en agendamiento dias inhabiles -->
+	<select id="diasInhabiles" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{call POR_ADMIN.POR_PKG_CONTROL_CTASNUEVAS.POR_SP_GET_DIASINHABILES(
+		#{O_COD_RESULT, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{O_MSG_RESULT, mode=OUT, jdbcType=VARCHAR,	javaType=java.lang.String},
+		#{diasInhabilesCur, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=hashBancaDigital}
+		)}
+	</select> 
+    
+	
+</mapper>
